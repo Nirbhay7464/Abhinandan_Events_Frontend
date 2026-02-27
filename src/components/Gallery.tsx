@@ -23,7 +23,10 @@ const GalleryPreview = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [p, v] = await Promise.all([getGalleryPhotos(), getGalleryVideos()]);
+       const [p, v] = await Promise.all([
+  getGalleryPhotos() as Promise<Photo[]>,
+  getGalleryVideos() as Promise<VideoItem[]>
+]);
         setPhotos(p?.slice(0, 6) || []); 
         setVideos(v?.slice(0, 4) || []); 
       } catch (e) { console.error(e); } finally { setLoading(false); }
