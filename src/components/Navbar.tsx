@@ -75,9 +75,10 @@ const Navbar = () => {
   return (
     <>
       <nav className="fixed top-0 w-full z-[100] px-4 sm:px-6 py-5 transition-all duration-500 bg-transparent">
+        {/* MODIFIED: Added default mobile padding and background behavior when not scrolled */}
         <div className={`max-w-7xl mx-auto transition-all duration-500 flex items-center justify-between ${isScrolled
             ? 'border border-amber-200/50 bg-white/95 backdrop-blur-2xl rounded-2xl px-6 md:px-8 py-2 shadow-[0_10px_40px_-15px_rgba(180,140,50,0.2)]'
-            : 'bg-transparent px-0 py-0'
+            : 'bg-white/80 backdrop-blur-md rounded-2xl px-4 py-3 md:bg-transparent md:backdrop-blur-none md:px-0 md:py-0'
           }`}>
 
           {/* LOGO */}
@@ -88,9 +89,10 @@ const Navbar = () => {
           >
             <motion.div
               whileHover={{ scale: 1.02 }}
+              /* MODIFIED: Adjusted responsive heights to prevent clipping on mobile */
               className={`transition-all duration-500 flex items-center ${isScrolled
-                  ? 'h-12 md:h-14'
-                  : 'h-16 md:h-20'
+                  ? 'h-10 md:h-14'
+                  : 'h-12 md:h-20'
                 }`}
             >
               <Image
@@ -99,7 +101,7 @@ const Navbar = () => {
                 width={140}
                 height={60}
                 priority
-                className="object-contain"
+                className="object-contain w-auto h-full"
               />
             </motion.div>
           </Link>
