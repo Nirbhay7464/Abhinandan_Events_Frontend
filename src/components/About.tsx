@@ -104,7 +104,7 @@ const AboutPreview = () => {
               
               <div className="flex flex-col">
                 <p className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">Founder & CEO</p>
-                <p className="font-serif italic text-xl text-slate-900 tracking-wide">Abhinandan J.</p>
+                <p className="font-serif italic text-xl text-slate-900 tracking-wide">Ritesh Wadhai.</p>
               </div>
             </div>
           </motion.div>

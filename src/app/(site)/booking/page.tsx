@@ -4,8 +4,21 @@ import { motion } from "framer-motion";
 import { Sparkles, Send, Loader2 } from "lucide-react"; // Added Loader2
 
 export default function BookingPage() {
-  // 1. Initialize loading state
+  // 1. Initialize loading state and phone state
   const [isLoading, setIsLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    phone: ""
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (name === "phone") {
+      const onlyNums = value.replace(/[^0-9]/g, "");
+      if (onlyNums.length <= 10) {
+        setFormData((prev) => ({ ...prev, [name]: onlyNums }));
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#FCFBF7] pt-32 pb-20 px-4 md:px-6 relative overflow-hidden">
@@ -38,23 +51,24 @@ export default function BookingPage() {
             e.preventDefault();
             setIsLoading(true); // 2. Start Loader
 
-            const formData = new FormData(e.currentTarget);
+            const form = e.currentTarget;
+            const dataFields = new FormData(form);
 
             try {
               const res = await fetch("/api/booking", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
-                  fullName: formData.get("fullName"),
-                  email: formData.get("email"),
-                  phone: formData.get("phone"),
-                  preferredContact: formData.get("preferredContact"),
-                  eventType: formData.get("eventType"),
-                  guestCount: Number(formData.get("guestCount")),
-                  eventDate: formData.get("eventDate"),
-                  budget: formData.get("budget"),
-                  venue: formData.get("venue"),
-                  notes: formData.get("notes"),
+                  fullName: dataFields.get("fullName"),
+                  email: dataFields.get("email"),
+                  phone: formData.phone, // Use state-based phone
+                  preferredContact: dataFields.get("preferredContact"),
+                  eventType: dataFields.get("eventType"),
+                  guestCount: Number(dataFields.get("guestCount")),
+                  eventDate: dataFields.get("eventDate"),
+                  budget: dataFields.get("budget"),
+                  venue: dataFields.get("venue"),
+                  notes: dataFields.get("notes"),
                 }),
               });
 
@@ -62,12 +76,13 @@ export default function BookingPage() {
 
               if (data.success) {
                 alert("Booking submitted successfully!");
-                e.currentTarget.reset();
+                form.reset();
+                setFormData({ phone: "" });
               } else {
                 alert("Something went wrong");
               }
-            } 
-             finally {
+            }
+            finally {
               setIsLoading(false); // 3. Stop Loader
             }
           }}
@@ -82,7 +97,7 @@ export default function BookingPage() {
               <span className="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center text-xs font-bold">01</span>
               <h2 className="text-xl font-serif text-slate-800">Contact Information</h2>
             </div>
-            
+
             <div className="grid md:grid-cols-2 gap-8">
               <div className="space-y-3">
                 <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Full Name</label>
@@ -101,21 +116,19 @@ export default function BookingPage() {
                 />
               </div>
               <div className="space-y-3">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Phone Number</label>
-                <input name="phone"
+                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">
+                  Phone Number
+                </label>
+                <input
+                  name="phone"
                   type="tel"
-                  placeholder="+1 (555) 000-0000"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  inputMode="numeric"
+                  maxLength={10}
+                  placeholder="Contact number"
                   className="w-full bg-slate-50 border-b border-transparent focus:border-amber-500 rounded-2xl px-6 py-4 transition-all outline-none text-slate-900 placeholder:text-slate-300"
                 />
-              </div>
-              <div className="space-y-3">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Preferred Contact Method</label>
-                <select name="preferredContact" className="w-full bg-slate-50 border-b border-transparent focus:border-amber-500 rounded-2xl px-6 py-4 transition-all outline-none text-slate-600 appearance-none">
-                  <option>Select Option</option>
-                  <option>Email</option>
-                  <option>Phone Call</option>
-                  <option>WhatsApp</option>
-                </select>
               </div>
             </div>
           </section>
@@ -139,9 +152,19 @@ export default function BookingPage() {
                 </select>
               </div>
               <div className="space-y-3">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Estimated Guest Count</label>
-                <input name="guestCount"
+                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">
+                  Estimated Guest Count
+                </label>
+                <input
+                  name="guestCount"
                   type="number"
+                  min="1" // Prevents the stepper (arrows) from going below 1
+                  onKeyDown={(e) => {
+                    // Prevents the user from typing the minus sign (-) or 'e' (scientific notation)
+                    if (e.key === '-' || e.key === 'e') {
+                      e.preventDefault();
+                    }
+                  }}
                   placeholder="e.g. 150"
                   className="w-full bg-slate-50 border-b border-transparent focus:border-amber-500 rounded-2xl px-6 py-4 transition-all outline-none text-slate-900"
                 />
@@ -153,16 +176,7 @@ export default function BookingPage() {
                   className="w-full bg-slate-50 border-b border-transparent focus:border-amber-500 rounded-2xl px-6 py-4 transition-all outline-none text-slate-900"
                 />
               </div>
-              <div className="space-y-3">
-                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">Investment / Budget Range</label>
-                <select name="budget" className="w-full bg-slate-50 border-b border-transparent focus:border-amber-500 rounded-2xl px-6 py-4 transition-all outline-none text-slate-600 appearance-none">
-                  <option>Select Range</option>
-                  <option>$10k - $25k</option>
-                  <option>$25k - $50k</option>
-                  <option>$50k - $100k</option>
-                  <option>$100k+</option>
-                </select>
-              </div>
+
             </div>
 
             <div className="space-y-3">
@@ -203,9 +217,8 @@ export default function BookingPage() {
               whileTap={!isLoading ? { scale: 0.98 } : {}}
               disabled={isLoading}
               type="submit"
-              className={`w-full py-6 rounded-2xl bg-slate-900 text-white font-bold uppercase tracking-[0.3em] text-[11px] shadow-2xl shadow-slate-200 transition-all flex items-center justify-center gap-4 group ${
-                isLoading ? "opacity-70 cursor-not-allowed" : ""
-              }`}
+              className={`w-full py-6 rounded-2xl bg-slate-900 text-white font-bold uppercase tracking-[0.3em] text-[11px] shadow-2xl shadow-slate-200 transition-all flex items-center justify-center gap-4 group ${isLoading ? "opacity-70 cursor-not-allowed" : ""
+                }`}
             >
               {isLoading ? (
                 <>
@@ -219,9 +232,7 @@ export default function BookingPage() {
                 </>
               )}
             </motion.button>
-            <p className="text-center mt-6 text-[10px] text-slate-400 uppercase tracking-widest">
-              By submitting, you agree to our <span className="underline cursor-pointer">Privacy Policy</span>
-            </p>
+            
           </div>
         </motion.form>
       </div>

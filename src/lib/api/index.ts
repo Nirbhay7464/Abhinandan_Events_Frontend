@@ -12,6 +12,8 @@ import {
   DUMMY_SERVICE_FEATURES,
 } from "../dummy-data/services";
 
+import { DUMMY_HERO_IMAGES } from "../dummy-data/hero";
+
 const API_BASE =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
@@ -201,6 +203,13 @@ export async function getGalleryVideos() {
 // ... (rest of the file remains same)
 export async function getGalleryStats() {
   return fetchWithFallback("/gallery/stats", DUMMY_GALLERY_STATS);
+}
+
+export async function getHeroImages() {
+  return DUMMY_HERO_IMAGES.map((item) => ({
+    id: item.id,
+    image: `${MEDIA_BASE}/${item.image}`,
+  }));
 }
 
 // =======================

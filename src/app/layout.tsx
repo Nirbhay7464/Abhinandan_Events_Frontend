@@ -9,7 +9,7 @@ const serif = Playfair_Display({ subsets: ["latin"], variable: "--font-serif" })
 const sans = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
 export const metadata: Metadata = {
-  title: "Abhinandan Events | Premier Wedding & Event Planners",
+  title: "Best Event Management Company in Amravati | Abhinandan Events",
   description: "Planning and celebrating your precious moments since 2010. Expert event management in Amravati and Pune.",
 };
 

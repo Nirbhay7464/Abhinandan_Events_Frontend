@@ -63,14 +63,34 @@ ${message}`;
     }
   };
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    if (name === "message") {
+      // Split by whitespace and filter out empty strings to get actual word count
+      const words = value.trim().split(/\s+/).filter(Boolean);
+
+      // Only update if word count is 200 or less, 
+      // OR if the user is deleting text (value length decreasing)
+      if (words.length <= 200 || value.length < formData.message.length) {
+        setFormData(prev => ({ ...prev, [name]: value }));
+      }
+    } if (name === "phone") {
+      // 1. Remove all non-numeric characters
+      const onlyNums = value.replace(/[^0-9]/g, "");
+
+      // 2. Only update if it's within the 10-digit limit
+      if (onlyNums.length <= 10) {
+        setFormData((prev) => ({ ...prev, [name]: onlyNums }));
+      }
+    } else {
+      setFormData((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const contactInfo = {
-    phone: "+91 98765 43210",
-    email: "info@abhinandan.com",
-    address: "123 Event Street, Mumbai, India",
-    hours: "Mon - Sat: 9:00 AM - 7:00 PM"
+    phone: "+91 9028633126 , 9921776472",
+    email: "ritesh.wadhai@gmail.com",
+    address: "Near Manor Mangalya, Old By-Pass, Amravati- 444607",
+    hours: "Mon - Sat: 10:00 AM - 9:00 PM"
   };
 
   const eventTypes = ["Corporate Event", "Wedding", "Social Event", "Conference", "Other"];
@@ -184,9 +204,13 @@ ${message}`;
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">Phone Number</label>
                     <input
-                      type="tel" name="phone" value={formData.phone} onChange={handleChange}
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      maxLength={10} // Prevents typing more than 10 digits
                       className="w-full px-0 py-3 bg-transparent border-b border-amber-200 text-slate-900 focus:outline-none focus:border-slate-900 transition-all font-serif text-lg placeholder:text-slate-200"
-                      placeholder="+91 00000 00000"
+                      placeholder="Phone Number"
                     />
                   </div>
 
@@ -205,9 +229,22 @@ ${message}`;
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">The Vision</label>
+                  <div className="flex justify-between items-end">
+                    <label className="text-[10px] font-black uppercase tracking-widest text-slate-400 ml-1">
+                      The Vision
+                    </label>
+                    <span className="text-[9px] font-bold text-amber-600 uppercase tracking-tighter">
+                      {formData.message.trim().split(/\s+/).filter(Boolean).length} / 200 Words
+                    </span>
+                  </div>
+
                   <textarea
-                    name="message" value={formData.message} onChange={handleChange} rows={3} required minLength={10}
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    rows={3}
+                    required
+                    minLength={10}
                     className="w-full px-0 py-3 bg-transparent border-b border-amber-200 text-slate-900 focus:outline-none focus:border-slate-900 transition-all font-serif text-lg placeholder:text-slate-200 resize-none"
                     placeholder="Describe the dream experience..."
                   />

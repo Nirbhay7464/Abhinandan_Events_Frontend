@@ -1,7 +1,9 @@
 "use client";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { useRef, useState } from "react";
-import { Users, MapPin, ChevronRight, Sparkles, ArrowUpRight } from "lucide-react";
+import { Users, MapPin, ChevronRight, Sparkles, ArrowUpRight, ArrowRight } from "lucide-react";
+import { useEffect } from "react";
+import { getHeroImages } from "@/lib/api";
 
 interface EventType {
   id: string;
@@ -19,13 +21,43 @@ const Hero = () => {
   const opacity = useTransform(scrollY, [0, 400], [1, 0]);
 
   const [activeEvent, setActiveEvent] = useState<string>("wedding");
+  const [heroImages, setHeroImages] = useState<any[]>([]);
+  useEffect(() => {
+  const loadHeroImages = async () => {
+    const data = await getHeroImages();
+    setHeroImages(data);
+  };
 
-  const eventTypes: EventType[] = [
-    { id: "wedding", name: "Weddings", count: "180+", img: "/wedding.png" },
-    { id: "corporate", name: "Corporate", count: "250+", img: "/corporate.png" },
-    { id: "social", name: "Festive Occasions", count: "120+", img: "/festive.png" },
-    { id: "conference", name: "Seminars & Summits", count: "95+", img: "/seminars.png" },
-  ];
+  loadHeroImages();
+}, []);
+const eventTypes: EventType[] = [
+  {
+    id: "wedding",
+    name: "Weddings",
+    count: "180+",
+    img: heroImages.find((i) => i.id === "wedding")?.image || "/wedding.png",
+  },
+  {
+    id: "corporate",
+    name: "Corporate",
+    count: "250+",
+    img: heroImages.find((i) => i.id === "corporate")?.image || "/corporate.png",
+  },
+  {
+    id: "social",
+    name: "Festive Occasions",
+    count: "120+",
+    img: heroImages.find((i) => i.id === "social")?.image || "/festive.png",
+  },
+  {
+    id: "conference",
+    name: "Seminars & Summits",
+    count: "95+",
+    img: heroImages.find((i) => i.id === "conference")?.image || "/seminars.png",
+  },
+];
+
+  
 
   const activeImageData = eventTypes.find(t => t.id === activeEvent) || eventTypes[0];
 
@@ -53,16 +85,7 @@ const Hero = () => {
 
         {/* HEADER AREA */}
         <motion.div style={{ y: textY, opacity }} className="text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-3 px-5 py-2 rounded-full border border-amber-200 bg-white/60 backdrop-blur-md mb-8 shadow-sm"
-          >
-            <Sparkles className="w-4 h-4 text-amber-600" />
-            <span className="text-[10px] font-bold uppercase tracking-[0.4em] text-amber-800">
-              Abhinandan Events
-            </span>
-          </motion.div>
+         
 
           <h1 className="text-6xl md:text-[74px] font-extrabold mb-6 tracking-tighter leading-[0.95] text-slate-900">
             {/* Every Celebration Deserves Perfection,*/} Dreaming of the Perfect Event? <br />
@@ -146,11 +169,20 @@ const Hero = () => {
                 ))}
               </div>
 
-              <a href="/booking" className="block w-full">
-                <button className="w-full py-5 rounded-2xl bg-slate-900 text-white font-bold text-sm hover:bg-amber-600 transition-all shadow-xl shadow-slate-900/10">
-                  Schedule Your Consultation
-                </button>
-              </a>
+<a href="/booking" className="group block w-full">
+  <button className="w-full py-5 px-8 rounded-2xl bg-slate-900 text-white font-bold text-sm 
+    flex items-center justify-center gap-2
+    hover:bg-amber-600 transition-all duration-300 ease-out 
+    shadow-xl shadow-slate-900/10 cursor-pointer">
+    
+    Schedule Your Consultation
+
+    <ArrowRight 
+      className="w-4 h-4 transition-transform duration-300 ease-out 
+      group-hover:translate-x-1.5" 
+    />
+  </button>
+</a>
             </div>
 
             {/* STATS AREA */}

@@ -10,33 +10,33 @@ const Footer = () => {
       tagline: "",
       description: "Crafting legacies through precision event architecture and unparalleled creative vision since 2009.",
     },
-    
+
     quickLinks: [
-      { name: "The Atelier", href: "#home" },
-      { name: "Our Story", href: "#about" },
-      { name: "Curation", href: "#services" },
-      { name: "Gallery", href: "#gallery" },
-      { name: "Contact", href: "#contact" }
+      { name: "The Atelier", href: "/#home" },
+      { name: "Our Story", href: "/#about" },
+      { name: "Curation", href: "/#services" },
+      { name: "Gallery", href: "/#gallery" },
+      { name: "Contact", href: "/#contact" }
     ],
-    
+
     services: [
       { name: "Corporate Galas", href: "/services#corporate" },
       { name: "Bespoke Weddings", href: "/services#weddings" },
       { name: "Social Soirees", href: "/services#social" },
       { name: "Design & Decor", href: "/services#design" }
     ],
-    
+
     contact: {
-      phone: "+91 98765 43210",
-      email: "concierge@abhinandan.com",
-      address: "123 Royal Estate, Mumbai, MH 400001",
+      phone: "+91 9028633126 , 9921776472",
+      email: "ritesh.wadhai@gmail.com",
+      address: "Near Manor Mangalya, Old By-Pass, Amravati- 444607",
     },
-    
+
     social: [
-      { platform: "Instagram", icon: <Instagram className="w-4 h-4" />, href: "#" },
-      { platform: "LinkedIn", icon: <Linkedin className="w-4 h-4" />, href: "#" },
-      { platform: "Facebook", icon: <Facebook className="w-4 h-4" />, href: "#" },
-      { platform: "Twitter", icon: <Twitter className="w-4 h-4" />, href: "#" }
+      { platform: "Instagram", icon: <Instagram className="w-4 h-4" />, href: "https://www.instagram.com/abhinandan_events/" },
+      { platform: "LinkedIn", icon: <Linkedin className="w-4 h-4" />, href: "https://in.linkedin.com/in/abhinandan-events-55a17a251" },
+      { platform: "Facebook", icon: <Facebook className="w-4 h-4" />, href: "https://www.facebook.com/chiutaidadu/" },
+      
     ]
   };
 
@@ -47,9 +47,9 @@ const Footer = () => {
 
       <div className="max-w-7xl mx-auto relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-16 mb-20">
-          
+
           {/* Brand Identity (Col 5) */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -57,18 +57,18 @@ const Footer = () => {
           >
             <div className="space-y-4">
               <div className="space-y-4">
-  <div className="relative h-16 w-48">
-    <img
-      src="/logo3.png"
-      alt="Abhinandan Events Logo"
-      className="h-full w-auto object-contain"
-    />
-  </div>
+                <div className="relative h-16 w-48">
+                  <img
+                    src="/logo3.png"
+                    alt="Abhinandan Events Logo"
+                    className="h-full w-auto object-contain"
+                  />
+                </div>
 
-  <h3 className="text-lg font-serif text-slate-900 tracking-wide uppercase">
-    Abhinandan Events
-  </h3>
-</div>
+                <h3 className="text-lg font-serif text-slate-900 tracking-wide uppercase">
+                  Abhinandan Events
+                </h3>
+              </div>
 
               <p className="text-slate-500 text-sm leading-relaxed max-w-sm font-medium">
                 {footerData.company.description}
@@ -92,7 +92,7 @@ const Footer = () => {
           </motion.div>
 
           {/* Navigation (Col 2) */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -113,7 +113,7 @@ const Footer = () => {
           </motion.div>
 
           {/* Services (Col 2) */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -133,7 +133,7 @@ const Footer = () => {
           </motion.div>
 
           {/* Direct Contact (Col 3) */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -170,16 +170,8 @@ const Footer = () => {
             <p className="text-slate-400 text-[11px] font-bold uppercase tracking-widest">
               © {new Date().getFullYear()} Abhinandan. Redefining Events.
             </p>
-            
-            <div className="flex items-center gap-8">
-              {["Privacy", "Terms", "Atelier"].map((item) => (
-                <Link key={item} href="#" className="text-slate-400 hover:text-slate-900 text-[11px] font-bold uppercase tracking-widest transition-colors">
-                  {item}
-                </Link>
-              ))}
-            </div>
 
-            <button 
+            <button
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               className="flex items-center gap-2 text-amber-600 text-[11px] font-black uppercase tracking-widest hover:text-slate-900 transition-colors"
             >
