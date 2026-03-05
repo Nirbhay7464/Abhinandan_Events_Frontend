@@ -31,7 +31,6 @@ const TestimonialsPreview = () => {
       try {
         const data = await getTestimonials();
 
-        // Normalize backend or dummy shape
         const normalized: Testimonial[] = data.map((item: any, index: number) => ({
           id: item.id ?? index + 1,
           name: item.name,
@@ -56,26 +55,21 @@ const TestimonialsPreview = () => {
     if (!testimonials.length) return;
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-    }, 2500);
+    }, 4500); // Increased slightly for better mobile reading
     return () => clearInterval(interval);
   }, [testimonials]);
 
   const submitReview = async (e: React.FormEvent) => {
     e.preventDefault();
-
     try {
-      await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/testimonials`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        }
-      );
+      await fetch(`${process.env.NEXT_PUBLIC_API_URL}/testimonials`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
     } catch (error) {
       console.log("Submit failed (backend might be offline)");
     }
-
     setShowForm(false);
     setFormData({ name: "", role: "", message: "", rating: 5 });
     alert("Thanks! Your review will appear after admin approval.");
@@ -86,44 +80,44 @@ const TestimonialsPreview = () => {
   const current = testimonials[currentIndex];
 
   return (
-    <section id="testimonials" className="py-32 px-6 bg-[#FCFBF7] relative overflow-hidden">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-200/20 blur-[140px] rounded-full pointer-events-none" />
+    <section id="testimonials" className="py-20 md:py-32 px-6 bg-[#FCFBF7] relative overflow-hidden">
+      {/* Background decoration - scaled for mobile */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] md:w-[600px] h-[300px] md:h-[600px] bg-amber-200/20 blur-[80px] md:blur-[140px] rounded-full pointer-events-none" />
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* HEADER */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-amber-200 bg-white mb-8 shadow-sm">
-            <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-            <span className="text-[10px] text-amber-800 font-black tracking-[0.4em] uppercase">
+        <div className="text-center mb-12 md:mb-16">
+          <div className="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-amber-200 bg-white mb-6 md:mb-8 shadow-sm">
+            <Sparkles className="w-3 md:w-3.5 h-3 md:h-3.5 text-amber-600" />
+            <span className="text-[9px] md:text-[10px] text-amber-800 font-black tracking-[0.3em] md:tracking-[0.4em] uppercase">
               Testimonials
             </span>
           </div>
-          <h2 className="text-5xl md:text-[64px] font-serif text-slate-900 leading-[0.9] tracking-tighter">
+          <h2 className="text-4xl md:text-[64px] font-serif text-slate-900 leading-[1.1] md:leading-[0.9] tracking-tighter">
             Kind Words from <br />
-            <span className="italic font-light text-amber-600">
-              Our Patrons
-            </span>
+            <span className="italic font-light text-amber-600">Our Patrons</span>
           </h2>
         </div>
 
         {/* CARD */}
         <div className="relative max-w-4xl mx-auto">
-          <div className="relative min-h-[380px] flex items-center">
+          <div className="relative min-h-[420px] md:min-h-[380px] flex items-center">
             <AnimatePresence mode="wait">
               {current && (
                 <motion.div
                   key={current.id}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.4, ease: "easeOut" }}
-                  className="relative w-full p-10 md:p-16 rounded-[3rem] bg-white border border-amber-100 shadow-[0_30px_70px_-20px_rgba(180,150,100,0.15)] text-center"
+                  className="relative w-full p-8 md:p-16 rounded-[2.5rem] md:rounded-[3rem] bg-white border border-amber-100 shadow-[0_20px_60px_-15px_rgba(180,150,100,0.15)] text-center"
                 >
-                  <div className="absolute -top-7 left-1/2 -translate-x-1/2 w-14 h-14 bg-slate-900 text-amber-400 rounded-2xl flex items-center justify-center shadow-xl rotate-3">
-                    <Quote className="w-7 h-7 fill-amber-400" />
+                  {/* Icon scaled for mobile */}
+                  <div className="absolute -top-6 left-1/2 -translate-x-1/2 w-12 h-12 md:w-14 md:h-14 bg-slate-900 text-amber-400 rounded-xl md:rounded-2xl flex items-center justify-center shadow-xl rotate-3">
+                    <Quote className="w-6 h-6 md:w-7 md:h-7 fill-amber-400" />
                   </div>
 
-                  <p className="text-xl md:text-2xl text-slate-800 mb-10 leading-relaxed font-serif italic tracking-tight">
+                  <p className="text-lg md:text-2xl text-slate-800 mb-8 md:mb-10 leading-relaxed font-serif italic tracking-tight">
                     “{current.message}”
                   </p>
 
@@ -132,20 +126,16 @@ const TestimonialsPreview = () => {
                       {[1, 2, 3, 4, 5].map((star) => (
                         <Star
                           key={star}
-                          size={16}
-                          className={
-                            star <= current.rating
-                              ? "text-amber-500 fill-amber-500"
-                              : "text-amber-100"
-                          }
+                          size={14}
+                          className={star <= current.rating ? "text-amber-500 fill-amber-500" : "text-amber-100"}
                         />
                       ))}
                     </div>
                     <div>
-                      <h4 className="text-slate-900 font-black text-xs uppercase tracking-[0.2em]">
+                      <h4 className="text-slate-900 font-black text-[10px] md:text-xs uppercase tracking-[0.2em]">
                         {current.name}
                       </h4>
-                      <p className="text-amber-600 font-bold text-[9px] uppercase tracking-widest mt-1">
+                      <p className="text-amber-600 font-bold text-[8px] md:text-[9px] uppercase tracking-widest mt-1">
                         {current.role || "Distinguished Guest"}
                       </p>
                     </div>
@@ -155,20 +145,20 @@ const TestimonialsPreview = () => {
             </AnimatePresence>
           </div>
 
-          {/* Pagination UI untouched */}
-          <div className="flex justify-center items-center gap-3 mt-12">
+          {/* Pagination */}
+          <div className="flex justify-center items-center gap-2 md:gap-3 mt-10 md:mt-12">
             {testimonials.map((_, index) => (
               <button
                 key={index}
                 onClick={() => setCurrentIndex(index)}
-                className="relative h-1.5 transition-all duration-500 rounded-full overflow-hidden bg-amber-100"
-                style={{ width: currentIndex === index ? "40px" : "12px" }}
+                className="relative h-1 md:h-1.5 transition-all duration-500 rounded-full overflow-hidden bg-amber-100"
+                style={{ width: currentIndex === index ? "32px" : "8px" }}
               >
                 {currentIndex === index && (
                   <motion.div
                     initial={{ x: "-100%" }}
                     animate={{ x: "0%" }}
-                    transition={{ duration: 2.5, ease: "linear" }}
+                    transition={{ duration: 4.5, ease: "linear" }}
                     className="absolute inset-0 bg-slate-900"
                   />
                 )}
@@ -177,11 +167,11 @@ const TestimonialsPreview = () => {
           </div>
         </div>
 
-        {/* CTA untouched */}
-        <div className="text-center mt-16">
+        {/* CTA */}
+        <div className="text-center mt-12 md:mt-16">
           <button
             onClick={() => setShowForm(true)}
-            className="inline-flex items-center gap-4 px-10 py-5 bg-slate-900 text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-2xl hover:bg-amber-600 transition-all duration-300 shadow-xl shadow-slate-900/10"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-4 px-8 md:px-10 py-4 md:py-5 bg-slate-900 text-white font-black text-[9px] md:text-[10px] uppercase tracking-[0.2em] rounded-2xl hover:bg-amber-600 transition-all duration-300 shadow-xl shadow-slate-900/10"
           >
             <Users className="w-4 h-4" />
             Share Your Experience
