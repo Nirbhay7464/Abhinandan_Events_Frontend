@@ -35,7 +35,7 @@ const Footer = () => {
     social: [
       { platform: "Instagram", icon: <Instagram className="w-4 h-4" />, href: "https://www.instagram.com/abhinandan_events/" },
       { platform: "LinkedIn", icon: <Linkedin className="w-4 h-4" />, href: "https://in.linkedin.com/in/abhinandan-events-55a17a251" },
-      { platform: "Facebook", icon: <Facebook className="w-4 h-4" />, href: "https://www.facebook.com/chiutaidadu/" },
+      { platform: "Facebook", icon: <Facebook className="w-4 h-4" />, href: "https://www.facebook.com/share/1DdEyJfqua/" },
       
     ]
   };
