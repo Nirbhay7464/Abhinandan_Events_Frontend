@@ -10,7 +10,7 @@ export default function BookingPage() {
     phone: ""
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (name === "phone") {
       const onlyNums = value.replace(/[^0-9]/g, "");
